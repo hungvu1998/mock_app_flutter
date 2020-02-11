@@ -7,10 +7,12 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixin{
+  TabController _tabController;
+  int indexTap=0;
   @override
   void initState() {
-
+    _tabController = TabController(vsync: this, length: 2);
     super.initState();
 
   }
@@ -81,19 +83,59 @@ class _LoginPageState extends State<LoginPage> {
                   child: DefaultTabController(
                     length: 2,
                     child: Scaffold(
-                      appBar: AppBar(
-                        bottom: TabBar(
+                      appBar: TabBar(
+                          onTap: (index){
+                            setState(() {
+                             indexTap=index;
+                            });
+                          },
+                          indicator: UnderlineTabIndicator(
+                            borderSide: BorderSide(
+                              style: BorderStyle.none
+                            )
+                          ),
+                          unselectedLabelColor: Colors.grey,
+                          labelColor: Colors.black,
                           tabs: <Widget>[
                             Tab(
-                              text: 'ĐĂNG KÝ',
+                                child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    children: [
+                                      Expanded(
+                                          child: Center(child: Text('ĐĂNG KÝ')),
+                                      ),
+                                      Container(
+                                        height: ScreenUtil().setHeight(20),
+                                        decoration: indexTap==0? BoxDecoration(
+                                          color:Colors.blue,
+                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(15),topRight: Radius.circular(15)),
+                                        ):null,
+                                      )
+                                    ]
+                                ),
                             ),
                             Tab(
-                              text: 'ĐĂNG NHẬP',
-                            )
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Expanded(
+                                      child: Center(child: Text('ĐĂNG NHẬP')),
+                                    ),
+                                    Container(
+                                      height: ScreenUtil().setHeight(20),
+                                      decoration: indexTap==1? BoxDecoration(
+                                        color:Colors.blue,
+                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(15),topRight: Radius.circular(15)),
+                                      ):null,
+                                    )
+                                  ]
+                              ),
+                            ),
                           ],
-                        ),
                       ),
+
                       body: TabBarView(
+                        controller: _tabController,
                         children: <Widget>[
                           Container(
                             color: Colors.black,
